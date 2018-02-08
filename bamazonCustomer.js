@@ -10,26 +10,25 @@ var connection = mysql.createConnection({
 	database: 'bamazon'
 });
 
-// Running this application will first display all of the items available for sale. 
-// Include the ids, names, and prices of products for sale.
-
-
 
 function initialDisplay() {
-	console.log("Here are the products available for purchase. Please take your time and browse.\n");
+  console.log("\n   +++++++++++++++++++++");
+  console.log("   +                   +");
+  console.log("   +   W E L C O M E   +");
+  console.log("   +                   +");
+  console.log("   +++++++++++++++++++++");
+	console.log("\n   Here are the products available for purchase. Please take your time and browse.\n");
 	var query = connection.query(
 		"SELECT id, product_name, department_name, price FROM products",
 		function(err, res) {
 			if (err) throw err;
-  		// instantiate 
       var table = new Table({
         head: ['ID', 'Product', 'Department', 'Price'],
         colWidths: [4, 19, 22, 9]
       });
-        // table is an Array, so you can `push`, `unshift`, `splice` and friends 
       for (var i = 0; i < res.length; i++) {
         table.push(
-          [res[i].id, res[i].product_name, res[i].department_name, res[i].price]
+          [res[i].id, res[i].product_name, res[i].department_name, res[i].price.toFixed(2)]
         );
       }
         console.log(table.toString());
@@ -39,9 +38,8 @@ function initialDisplay() {
 }
 
 connection.connect(function(err) {
-	console.log('hi');
 	if (err) throw err;
-	console.log("connected as id " + connection.threadId + "\n");
+	//console.log("connected as id " + connection.threadId + "\n");
 	initialDisplay();
 });
 
@@ -79,46 +77,84 @@ function promptPurchase() {
     // If the user confirms,
     if (inquirerRes.confirm) {
       readProducts(inquirerRes);
-     //  console.log("inquirerResponse.prodID ", inquirerResponse.prodID);
-     //  console.log("inquirerResponse.prodUnits ", inquirerResponse.prodUnits);
-    	// if (placeholder) {  // not enough in stock
-    	// 	console.log("Insufficient quantity!")
-    	// } else {  // if there's enough in stock
-     //  	console.log("\nOrder just placed.\n Receipt: " + inquirerResponse.prodUnits + " x " + inquirerResponse.prodID + "\n");
-    	// }
-    }
-    else {
-      console.log("\nThat's okay. Come again when you're ready.\n");
+      if (inquirerRes.prodID !== undefined || res[0] !== undefined) {
+        checkStock(inquirerRes);
+        //connection.end();
+      }
+    } else {
+      console.log("\n *** That's okay. Come again when you're ready. ***\n");
+      connection.end();
     }
   });
 }
 
-
 function readProducts(inquirerRes) {
-  console.log("\n\nreadProducts function.. \n");
+  console.log("\n\nLoading.. \n");
   connection.query(
     "SELECT * FROM products WHERE ?",
     {
       id: inquirerRes.prodID,
     },
     function(err, res) {
-      // instantiate 
       var table = new Table({
         head: ['ID', 'Product', 'Department', 'Price', 'In Stock'],
         colWidths: [4, 19, 22, 9, 10]
       });
-        // table is an Array, so you can `push`, `unshift`, `splice` and friends 
-      for (var i = 0; i < res.length; i++) {
-        table.push(
-          [res[i].id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]
-        );
+
+      if (inquirerRes.prodID !== undefined) {
+        for (var i = 0; i < res.length; i++) {
+          table.push(
+            [res[i].id, res[i].product_name, res[i].department_name, res[i].price.toFixed(2), res[i].stock_quantity]
+          );
+        }
+          console.log(table.toString());
+          console.log("\n");
+      } else {
+        console.log("That's not a valid product ID. Please come again when you're ready.\n")
       }
-        console.log(table.toString());
-        console.log("\n");
     });
 }
 
-// function checkStock(inquirerRes) {
-//   console.log()
-// }
+function checkStock(inquirerRes) {
+  connection.query(
+    "SELECT * FROM products WHERE ?",
+    {
+      id: inquirerRes.prodID,
+    },
+    function(err, res) {
+      console.log(">>> Checking stock...");
+      if (res[0] === undefined) {
+        console.log("Invalid input... come again when you're ready.");
+        connection.end();
+      } else if (res[0].stock_quantity > inquirerRes.prodUnits) {
+        console.log("You've just purchased " + inquirerRes.prodUnits + " x " + res[0].product_name);
+        console.log("*** Total cost: $" + (inquirerRes.prodUnits*res[0].price + " ***\n"));
+        updateInventory(res, inquirerRes);
+      } else {
+        console.log("*** Out of stock! *** \nThere's currently only " + res[0].stock_quantity + " in stock.\n");
+      }
+  });
+}
+
+function updateInventory(res, inquirerRes) {
+  console.log(">>> Updating stock...\n");
+  var query = connection.query(
+    "UPDATE products SET ? WHERE ?",
+    [
+      {
+        stock_quantity: (res[0].stock_quantity-inquirerRes.prodUnits)
+      },
+      {
+        product_name: res[0].product_name
+      }
+    ],
+    function(err, res) {
+      console.log("\n... Stock updated!\n");
+      connection.end();
+     // readProducts(inquirerRes);
+    });
+}
+
+
+
 

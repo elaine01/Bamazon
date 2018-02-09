@@ -109,7 +109,7 @@ function readProducts(inquirerRes) {
           console.log(table.toString());
           console.log("\n");
       } else {
-        console.log("That's not a valid product ID. Please come again when you're ready.\n")
+        console.log("That's not a valid product ID. Please come back when you're ready.\n")
       }
     });
 }

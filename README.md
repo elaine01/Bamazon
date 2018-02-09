@@ -3,9 +3,9 @@
 An eCommerce app using Node.js and MySQL to see a list of items, make purchases, and cross-checks if the requested item is in stock.
 
 ## Table of Contents
-* [Installation|https://github.com/elaine01/Bamazon#installation]
-* [Usage|https://github.com/elaine01/Bamazon#usage]
-* [Technology|https://github.com/elaine01/Bamazon#technology]
+* [Installation](https://github.com/elaine01/Bamazon#installation)
+* [Usage](https://github.com/elaine01/Bamazon#usage)
+* [Technology](https://github.com/elaine01/Bamazon#technology)
 
 ## Installation
 ```

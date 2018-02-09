@@ -29,11 +29,11 @@ If the user doesn't confirm, the program will quit with a good-bye message.
 ![not sure](https://github.com/elaine01/Bamazon/blob/master/assets/Screen%20Shot%202018-02-08%20at%2010.45.06%20PM.png)
 
 ### Decides to buy
-If the user confirms, the script will check if there is enough of the item in stock, and will load the product info, including stock quantity. 
+If the user confirms, the script will check if there is enough of the item in stock, and will load the product info, including stock quantity and total cost. 
 ![purchased](https://github.com/elaine01/Bamazon/blob/master/assets/Screen%20Shot%202018-02-08%20at%2010.27.25%20PM.png)
 
 ### If there's insufficient quantity
-If there's not enough of the product in stock, the 
+If there's not enough of the product in stock, the message will notify the user and quits the program.
 ![out of stock](https://github.com/elaine01/Bamazon/blob/master/assets/Screen%20Shot%202018-02-08%20at%2010.28.03%20PM.png)
 
 ### Inputs wrong ID

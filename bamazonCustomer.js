@@ -100,8 +100,7 @@ function readProducts(inquirerRes) {
         head: ['ID', 'Product', 'Department', 'Price', 'In Stock'],
         colWidths: [4, 19, 22, 9, 10]
       });
-
-      if (inquirerRes.prodID !== undefined) {
+      if (inquirerRes.prodID >=1 && inquirerRes.prodID <= 10) {
         for (var i = 0; i < res.length; i++) {
           table.push(
             [res[i].id, res[i].product_name, res[i].department_name, res[i].price.toFixed(2), res[i].stock_quantity]
@@ -122,16 +121,15 @@ function checkStock(inquirerRes) {
       id: inquirerRes.prodID,
     },
     function(err, res) {
-      console.log(">>> Checking stock...");
       if (res[0] === undefined) {
-        console.log("Invalid input... come again when you're ready.");
         connection.end();
       } else if (res[0].stock_quantity > inquirerRes.prodUnits) {
         console.log("You've just purchased " + inquirerRes.prodUnits + " x " + res[0].product_name);
-        console.log("*** Total cost: $" + (inquirerRes.prodUnits*res[0].price + " ***\n"));
+        console.log("*** Total cost: $" + (inquirerRes.prodUnits*res[0].price).toFixed(2) + " ***\n");
         updateInventory(res, inquirerRes);
       } else {
         console.log("*** Out of stock! *** \nThere's currently only " + res[0].stock_quantity + " in stock.\n");
+        connection.end();
       }
   });
 }

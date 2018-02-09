@@ -3,9 +3,9 @@
 An eCommerce app using Node.js and MySQL to see a list of items, make purchases, and cross-checks if the requested item is in stock.
 
 ## Table of Contents
-* Installation
-* Usage
-* Technology
+* [Installation|https://github.com/elaine01/Bamazon#installation]
+* [Usage|https://github.com/elaine01/Bamazon#usage]
+* [Technology|https://github.com/elaine01/Bamazon#technology]
 
 ## Installation
 ```
@@ -26,7 +26,7 @@ User is prompted to type what item to buy and the quantity, and is asked to conf
 
 ### Decides not to buy
 If the user doesn't confirm, the program will quit with a good-bye message.
-![]()
+![not sure](https://github.com/elaine01/Bamazon/blob/master/assets/Screen%20Shot%202018-02-08%20at%2010.45.06%20PM.png)
 
 ### Decides to buy
 If the user confirms, the script will check if there is enough of the item in stock, and will load the product info, including stock quantity. 
